@@ -30,7 +30,7 @@ module GreenScreen
     private
 
     def load_source(source)
-      jobs = load_cc_xml(source.url)
+      jobs = load_cc_xml(source)
       if included_jobs = source.jobs
         jobs = jobs.select { |j| included_jobs.member?(j.name) }
       end
@@ -39,8 +39,10 @@ module GreenScreen
       $stderr.puts "ERROR loading #{source.url.inspect}: #{e}"
     end
 
-    def load_cc_xml(url)
-      xml = REXML::Document.new(open(url))
+    def load_cc_xml(source)
+      opts =  {}
+      opts[:http_basic_authentication] = [source.username, source.password] if source.respond_to?(:username)
+      xml = REXML::Document.new(open(source.url, opts))
       xml.elements["//Projects"].map do |project_element|
         data = project_element.attributes
         Job.new.tap do |job|

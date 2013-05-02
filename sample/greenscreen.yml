@@ -11,3 +11,10 @@ sources:
     jobs:
       - roodi
       - runway
+
+  -
+    url: http://yet.another.build.server:8080/cc.xml
+    username: 'batman'
+    password: 'wayne'
+    jobs:
+      - batmobile
